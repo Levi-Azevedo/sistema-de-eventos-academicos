@@ -15,7 +15,7 @@ Proxy Reverso: Nginx (configurado para balanceamento de carga e serviço de arqu
 Tempo Real: Phoenix Channels/LiveView para notificações e chat ao vivo.
 
 
-🚀 Funcionalidades Implementadas
+        🚀 Funcionalidades Implementadas
 O sistema pretende atender aos seguintes requisitos do projeto:
 
 Autenticação: Sistema de login com papéis diferenciados para Aluno, Palestrante e Admin.
@@ -25,4 +25,4 @@ Dashboards: Visualização gráfica da ocupação dos eventos e relatórios por 
 Busca Avançada: Implementação de busca full-text no banco de dados.
 
 
-📂 Como Executar o Projeto
+        📂 Como Executar o Projeto
