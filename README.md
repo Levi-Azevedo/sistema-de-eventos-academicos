@@ -1,12 +1,12 @@
 Sistema de Gerenciamento de Eventos Acadêmicos desenvolvido para a disciplina de Paradigmas de Linguagens de Programação.
 
 
-👥 Integrantes do Grupo
+    👥 Integrantes do Grupo
 
 -
 
 
-🛠 Arquitetura e Stack Tecnológica:
+    🛠 Arquitetura e Stack Tecnológica:
 Este sistema vai ser construído como uma aplicação web completa utilizando:
 
 Linguagem/Framework: Elixir + Phoenix Framework (focado em alta concorrência e tolerância a falhas).
