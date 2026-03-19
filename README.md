@@ -2,7 +2,9 @@
 Sistema de Gerenciamento de Eventos Acadêmicos desenvolvido para a disciplina de Paradigmas de Linguagens de Programação.
 
 Sistema de Gerenciamento de Eventos AcadêmicosProjeto prático para a disciplina de Paradigmas de Linguagens de Programação (2026).
+
 👥 Integrantes do Grupo
+
 -
 
 
