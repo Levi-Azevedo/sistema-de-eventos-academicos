@@ -14,10 +14,14 @@
 
 <h3>🛠 Stack Tecnológica</h3>
 A aplicação utiliza uma stack moderna focada em alta concorrência e performance:
-Backend: Elixir + Phoenix Framework.
-Banco de Dados: PostgreSQL (Consultas complexas e busca full-text).
-Servidor Web: Nginx como Proxy Reverso.
-Tempo Real: Phoenix Channels para Chat e Notificações.
+
+- Backend: Elixir + Phoenix Framework.
+
+- Banco de Dados: PostgreSQL (Consultas complexas e busca full-text).
+
+- Servidor Web: Nginx como Proxy Reverso.
+
+- Tempo Real: Phoenix Channels para Chat e Notificações.
 
 <h3>🚀 Como Rodar o Projeto</h3> 
 <h4> 1. Pré-requisitos: </h4>
@@ -43,9 +47,11 @@ mix deps.get
 
 <h4>3. Configuração do Banco de Dados</h4>
   
-Abra o arquivo config/dev.exs.
-Edite as credenciais do PostgreSQL (username e password).
-Crie o banco de dados executando:
+- Abra o arquivo config/dev.exs.
+
+- Edite as credenciais do PostgreSQL (username e password) para as credenciais do seu PostgreSQL.
+
+- Crie o banco de dados executando:
 ~~~
 mix ecto.create
 ~~~
