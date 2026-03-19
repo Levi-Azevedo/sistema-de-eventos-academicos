@@ -3,11 +3,7 @@ import Config
 # Configure your database
 config :sistema_eventos, SistemaEventos.Repo,
   username: "postgres",
-<<<<<<< HEAD
   password: "sua_senha_secreta",
-=======
-  password: "password",
->>>>>>> 4801ac5701200ef3fa7647224a6745457365e9f7
   hostname: "localhost",
   database: "sistema_eventos_dev",
   stacktrace: true,
