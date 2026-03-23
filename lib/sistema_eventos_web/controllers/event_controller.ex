@@ -1,6 +1,6 @@
 defmodule SistemaEventosWeb.EventController do
   use SistemaEventosWeb, :controller
-
+  
   alias SistemaEventos.Events
   alias SistemaEventos.Events.Event
 
@@ -58,5 +58,26 @@ defmodule SistemaEventosWeb.EventController do
     conn
     |> put_flash(:info, "Event deleted successfully.")
     |> redirect(to: ~p"/events")
+  end
+
+  def register(conn, %{"id" => event_id}) do
+  user = conn.assigns.current_user
+
+  case Events.register_user(event_id, user.id) do
+    {:ok, _registracion} ->
+      conn
+      |> put_flash(:info, "Inscricao realizada com sucesso!!!!")
+      |> redirect(to: ~p"/events/#{event_id}")
+      
+    {:error, :vagas_esgotadas} ->
+     conn 
+     |>put_flash(:info, "As vagas para esse evento estao esgotadas, mto paia ne ")
+     |> redirect(to: ~p"/events/#{event_id}")
+    
+    {:error, :_changeset} ->
+     conn
+     |>put_flash(:error, "voce ja ta inscrito, lerdao, se ligue")
+     |> redirect(to: ~p"/events/#{event_id}")
+    end
   end
 end

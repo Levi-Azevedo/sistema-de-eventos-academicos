@@ -8,6 +8,8 @@ defmodule SistemaEventos.Events do
 
   alias SistemaEventos.Events.Event
 
+  alias SistemaEventos.Events.Registracion
+
   @doc """
   Returns the list of events.
 
@@ -100,5 +102,23 @@ defmodule SistemaEventos.Events do
   """
   def change_event(%Event{} = event, attrs \\ %{}) do
     Event.changeset(event, attrs)
+  end
+
+
+  def register_user(event_id,user_id) do #registrador de usuario em um evento, desde q haja vagas
+    event = get_event!(event_id)
+    
+    contagem_atual =  Repo.aggregate(
+      from(r in Registracion, where: r.event_id == ^event_id),
+      :count, :id
+    )
+
+    if contagem_atual < event.total_slots do
+      %Registracion{}
+      |> Registracion.changeset(%{event_id: event_id, user_id: user_id})
+      |> Repo.insert()
+    else 
+      {:error, :vagas_esgotadas}
+    end
   end
 end

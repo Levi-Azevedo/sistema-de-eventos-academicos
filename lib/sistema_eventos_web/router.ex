@@ -50,6 +50,9 @@ defmodule SistemaEventosWeb.Router do
   scope "/", SistemaEventosWeb do
     pipe_through [:browser, :require_authenticated_user]
 
+    resources "/events", EventController
+    post "/events/:id_register", EventController, :register
+
     live_session :require_authenticated_user,
       on_mount: [{SistemaEventosWeb.UserAuth, :require_authenticated}] do
       live "/users/settings", UserLive.Settings, :edit
