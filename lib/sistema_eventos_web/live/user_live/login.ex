@@ -7,89 +7,116 @@ defmodule SistemaEventosWeb.UserLive.Login do
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash} current_scope={@current_scope}>
-      <div class="mx-auto max-w-sm space-y-4">
-        <div class="text-center">
-          <.header>
-            <p>Log in</p>
-            <:subtitle>
-              <%= if @current_scope do %>
-                You need to reauthenticate to perform sensitive actions on your account.
-              <% else %>
-                Don't have an account? <.link
-                  navigate={~p"/users/register"}
-                  class="font-semibold text-brand hover:underline"
-                  phx-no-format
-                >Sign up</.link> for an account now.
-              <% end %>
-            </:subtitle>
-          </.header>
-        </div>
+      <%!-- Fundo escuro cobrindo a área central --%>
+      <div class="min-h-[80vh] flex flex-col justify-center bg-slate-950 py-12 sm:px-6 lg:px-8 rounded-3xl shadow-2xl">
+        <div class="sm:mx-auto sm:w-full sm:max-w-md space-y-4">
+          
+          <div class="text-center">
+            <.header class="text-white">
+              <p class="text-4xl font-extrabold text-white tracking-tight">Bem-vindo de volta</p>
+              <:subtitle>
+                <%= if @current_scope do %>
+                  <span class="text-slate-400">Você precisa se reautenticar para acessar áreas sensíveis.</span>
+                <% else %>
+                  <span class="text-slate-400">Ainda não tem uma conta?</span>
+                  <.link
+                    navigate={~p"/users/register"}
+                    class="font-semibold text-blue-500 hover:text-blue-400 transition-colors cursor-pointer"
+                    phx-no-format
+                  >Cadastre-se aqui</.link>
+                <% end %>
+              </:subtitle>
+            </.header>
+          </div>
 
-        <div :if={local_mail_adapter?()} class="alert alert-info">
-          <.icon name="hero-information-circle" class="size-6 shrink-0" />
-          <div>
-            <p>You are running the local mail adapter.</p>
-            <p>
-              To see sent emails, visit <.link href="/dev/mailbox" class="underline">the mailbox page</.link>.
-            </p>
+          <%!-- Alerta do E-mail (estilizado para Dark Mode) --%>
+          <div :if={local_mail_adapter?()} class="alert alert-info bg-blue-900/50 border border-blue-800 text-blue-200 mt-4 rounded-xl">
+            <.icon name="hero-information-circle" class="size-6 shrink-0 text-blue-400" />
+            <div>
+              <p>Rodando o adaptador de e-mail local.</p>
+              <p>
+                Para ver os e-mails, acesse <.link href="/dev/mailbox" class="underline text-blue-300 hover:text-blue-200 cursor-pointer">a caixa de entrada</.link>.
+              </p>
+            </div>
+          </div>
+
+          <%!-- Card Principal do Formulário --%>
+          <div class="bg-slate-900 border border-slate-800 py-8 px-4 shadow-2xl sm:rounded-2xl sm:px-10 mt-8">
+            
+            <%!-- Formulário 1: Link Mágico --%>
+            <.form
+
+            
+              :let={f}
+              for={@form}
+              id="login_form_magic"
+              action={~p"/users/log-in"}
+              phx-submit="submit_magic"
+            >
+              <.input
+                readonly={!!@current_scope}
+                field={f[:email]}
+                type="email"
+                label="Email"
+                autocomplete="username"
+                spellcheck="false"
+                required
+                phx-mounted={JS.focus()}
+              />
+              <.button class="w-full mt-5 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl shadow-lg cursor-pointer transition-transform transform hover:scale-[1.02]">
+                Entrar com Link Mágico <span aria-hidden="true" class="ml-2">→</span>
+              </.button>
+            </.form>
+
+            <%!-- Divisor customizado --%>
+            <div class="relative my-8">
+              <div class="absolute inset-0 flex items-center">
+                <div class="w-full border-t border-slate-700"></div>
+              </div>
+              <div class="relative flex justify-center text-sm">
+                <span class="bg-slate-900 px-4 text-slate-500 font-semibold">ou com senha</span>
+              </div>
+            </div>
+
+            <%!-- Formulário 2: Senha Tradicional --%>
+            <.form
+              :let={f}
+              for={@form}
+              id="login_form_password"
+              action={~p"/users/log-in"}
+              phx-submit="submit_password"
+              phx-trigger-action={@trigger_submit}
+              class="space-y-5"
+            >
+              <.input
+                readonly={!!@current_scope}
+                field={f[:email]}
+                type="email"
+                label="Email"
+                autocomplete="username"
+                spellcheck="false"
+                required
+              />
+              <.input
+                field={@form[:password]}
+                type="password"
+                label="Senha"
+                autocomplete="current-password"
+                spellcheck="false"
+              />
+              
+              <div class="pt-2">
+                <.button class="w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-3 rounded-xl shadow cursor-pointer transition-transform transform hover:scale-[1.02]" name={@form[:remember_me].name} value="true">
+                  Entrar e continuar logado
+                </.button>
+                <.button class="w-full mt-3 bg-transparent border border-slate-700 hover:bg-slate-800 text-slate-400 font-semibold py-3 rounded-xl cursor-pointer transition-colors">
+                  Entrar apenas desta vez
+                </.button>
+              </div>
+            </.form>
+
           </div>
         </div>
-
-        <.form
-          :let={f}
-          for={@form}
-          id="login_form_magic"
-          action={~p"/users/log-in"}
-          phx-submit="submit_magic"
-        >
-          <.input
-            readonly={!!@current_scope}
-            field={f[:email]}
-            type="email"
-            label="Email"
-            autocomplete="username"
-            spellcheck="false"
-            required
-            phx-mounted={JS.focus()}
-          />
-          <.button class="btn btn-primary w-full">
-            Log in with email <span aria-hidden="true">→</span>
-          </.button>
-        </.form>
-
-        <div class="divider">or</div>
-
-        <.form
-          :let={f}
-          for={@form}
-          id="login_form_password"
-          action={~p"/users/log-in"}
-          phx-submit="submit_password"
-          phx-trigger-action={@trigger_submit}
-        >
-          <.input
-            readonly={!!@current_scope}
-            field={f[:email]}
-            type="email"
-            label="Email"
-            autocomplete="username"
-            spellcheck="false"
-            required
-          />
-          <.input
-            field={@form[:password]}
-            type="password"
-            label="Password"
-            autocomplete="current-password"
-            spellcheck="false"
-          />
-          <.button class="btn btn-primary w-full" name={@form[:remember_me].name} value="true">
-            Log in and stay logged in <span aria-hidden="true">→</span>
-          </.button>
-          <.button class="btn btn-primary btn-soft w-full mt-2">
-            Log in only this time
-          </.button>
-        </.form>
       </div>
     </Layouts.app>
     """

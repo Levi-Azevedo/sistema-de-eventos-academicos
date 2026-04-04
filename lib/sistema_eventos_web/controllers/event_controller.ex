@@ -4,6 +4,10 @@ defmodule SistemaEventosWeb.EventController do
   alias SistemaEventos.Events
   alias SistemaEventos.Events.Event
 
+  plug :check_event_owner when action in [:edit, :update, :delete]
+  plug :ensure_palestrante_ou_admin when action in [:new, :create]
+  plug :ensure_admin_ou_aluno when action in [:register]
+
   def index(conn, _params) do
     events = Events.list_events()
     render(conn, :index, events: events)
@@ -15,6 +19,7 @@ defmodule SistemaEventosWeb.EventController do
   end
 
   def create(conn, %{"event" => event_params}) do
+    event_params = Map.put(event_params, "user_id", conn.assigns.current_user.id)
     case Events.create_event(event_params) do
       {:ok, event} ->
         conn
@@ -80,4 +85,44 @@ defmodule SistemaEventosWeb.EventController do
      |> redirect(to: ~p"/events/#{event_id}")
     end
   end
+
+  defp check_event_owner(conn, _opts) do 
+    event_id = conn.params["id"]
+    event = Events.get_event!(event_id)
+    user = conn.assigns.current_user
+
+    if event.user_id == user.id or user.role == "admin" do
+      conn
+    else 
+      conn
+      |> put_flash(:error, "Voce nao é o dono do evento pai, se mande va")
+      |> redirect(to: ~p"/events")
+      |> halt()
+    end
+  end
+
+  defp ensure_palestrante_ou_admin(conn, _opts) do
+    user = conn.assigns.current_user
+    if user.role in ["palestrante", "admin"] do
+      conn
+    else
+      conn
+      |> put_flash(:error, "somente palestrantes podem cirar eventos, irmao")
+      |> redirect(to: ~p"/events")
+      |> halt()
+    end
+  end
+
+  defp ensure_admin_ou_aluno(conn, _opts) do
+    user = conn.assigns.current_user
+    if user.role in ["aluno", "admin"] do
+      conn
+    else
+      conn 
+      |> put_flash(:error, "somente alunos podem se inscrever nas palestras???")
+      |> redirect(to: ~p"/events")
+      |> halt()
+    end
+  end
+
 end

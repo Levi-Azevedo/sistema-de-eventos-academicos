@@ -11,6 +11,8 @@ defmodule SistemaEventosWeb.Router do
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug :fetch_current_scope_for_user
+
+    plug :alias_current_user
   end
 
   pipeline :api do
@@ -51,7 +53,7 @@ defmodule SistemaEventosWeb.Router do
     pipe_through [:browser, :require_authenticated_user]
 
     resources "/events", EventController
-    post "/events/:id_register", EventController, :register
+    post "/events/:id/register", EventController, :register
 
     live_session :require_authenticated_user,
       on_mount: [{SistemaEventosWeb.UserAuth, :require_authenticated}] do
@@ -74,5 +76,13 @@ defmodule SistemaEventosWeb.Router do
 
     post "/users/log-in", UserSessionController, :create
     delete "/users/log-out", UserSessionController, :delete
+  end
+
+  defp alias_current_user(conn, _opts) do
+    if scope = conn.assigns[:current_scope] do
+      assign(conn, :current_user, scope.user)
+    else
+      assign(conn, :current_user, nil)
+    end
   end
 end

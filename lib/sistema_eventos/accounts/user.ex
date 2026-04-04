@@ -8,6 +8,7 @@ defmodule SistemaEventos.Accounts.User do
     field :hashed_password, :string, redact: true
     field :confirmed_at, :utc_datetime
     field :authenticated_at, :utc_datetime, virtual: true
+    field :role, :string, default: "aluno"
 
     timestamps(type: :utc_datetime)
   end
@@ -81,7 +82,7 @@ defmodule SistemaEventos.Accounts.User do
   defp validate_password(changeset, opts) do
     changeset
     |> validate_required([:password])
-    |> validate_length(:password, min: 12, max: 72)
+    |> validate_length(:password, min: 4, max: 72)
     # Examples of additional password validation:
     # |> validate_format(:password, ~r/[a-z]/, message: "at least one lower case character")
     # |> validate_format(:password, ~r/[A-Z]/, message: "at least one upper case character")
@@ -127,4 +128,17 @@ defmodule SistemaEventos.Accounts.User do
     Pbkdf2.no_user_verify()
     false
   end
+
+  def registration_changeset(user, attrs, otps \\ []) do
+    user 
+    |> cast(attrs, [:email, :password, :role])
+    |> valiadete_role()
+    |> validate_email(otps)
+    |> validate_password(otps)
+  end
+
+  defp valiadete_role(changeset) do 
+    validate_inclusion(changeset, :role, ["aluno", "palestrante", "admin"])
+  end
+
 end
