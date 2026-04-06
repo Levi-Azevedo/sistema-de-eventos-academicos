@@ -12,7 +12,7 @@ defmodule SistemaEventosWeb.UserLive.Login do
         <div class="sm:mx-auto sm:w-full sm:max-w-md space-y-4">
           
           <div class="text-center">
-            <.header class="text-white">
+            <.header>
               <p class="text-4xl font-extrabold text-white tracking-tight">Bem-vindo de volta</p>
               <:subtitle>
                 <%= if @current_scope do %>

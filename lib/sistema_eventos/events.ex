@@ -104,6 +104,14 @@ defmodule SistemaEventos.Events do
     Event.changeset(event, attrs)
   end
 
+  def is_user_registered?(event_id, user_id)do
+    query = 
+      from r in Registracion,
+      where: r.event_id == ^event_id and r.user_id == ^user_id
+
+    Repo.exists?(query)
+  end
+
 
   def register_user(event_id,user_id) do #registrador de usuario em um evento, desde q haja vagas
     event = get_event!(event_id)

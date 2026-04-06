@@ -3,6 +3,8 @@ defmodule SistemaEventos.Accounts.User do
   import Ecto.Changeset
 
   schema "users" do
+    field :nome, :string 
+    field :matricula, :string  
     field :email, :string
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
@@ -131,14 +133,28 @@ defmodule SistemaEventos.Accounts.User do
 
   def registration_changeset(user, attrs, otps \\ []) do
     user 
-    |> cast(attrs, [:email, :password, :role])
+    |> cast(attrs, [:email,:nome, :matricula, :password, :role])
+    |> validate_required([:nome, :matricula])
     |> valiadete_role()
     |> validate_email(otps)
     |> validate_password(otps)
+    |> validate_length(:nome, max: 100)
+    |>validate_length(:matricula, max: 9)
   end
 
   defp valiadete_role(changeset) do 
     validate_inclusion(changeset, :role, ["aluno", "palestrante", "admin"])
   end
 
+  @doc """
+  alterar o nome e matriclua do usuario 
+  """
+  def profile_changeset(user, attrs) do
+    user 
+    |> cast(attrs, [:nome, :matricula])
+    |> validate_required([:nome])
+    |> validate_length(:nome, max: 100)
+    |> validate_length(:matricula, is: 9, message: "Precisa conter 9 digitos")
+    |> validate_format(:matricula, ~r/^\d+$/, message: "deve conter apenas números")
+    end
 end

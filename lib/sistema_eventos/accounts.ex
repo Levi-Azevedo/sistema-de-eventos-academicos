@@ -127,6 +127,16 @@ defmodule SistemaEventos.Accounts do
     end)
   end
 
+  def change_user_profile(%User{} = user, attrs \\%{})do
+    User.profile_changeset(user, attrs)
+  end
+
+  def update_user_profile(%User{} = user, attrs \\%{})do
+    user 
+    |> User.profile_changeset(attrs)
+    |> Repo.update()
+  end
+
   @doc """
   Returns an `%Ecto.Changeset{}` for changing the user password.
 

@@ -7,13 +7,13 @@
         <.icon name="hero-arrow-left" />
       </.button>
 
-      <%= if @current_user.id == @event.user_id or @current_user.role == "admin" do %>
+      <%= if @current_user && (@current_user.id == @event.user_id or @current_user.role == "admin") do %>
         <.button variant="primary" navigate={~p"/events/#{@event}/edit?return_to=show"}>
           <.icon name="hero-pencil-square" /> Edit event
         </.button>
       <% end %>
 
-      <%= if @current_user.role in ["aluno", "admin"] do %>
+      <%= if @current_user && (@current_user.role in ["aluno", "admin"]) do %>
         <.link href={~p"/events/#{@event.id}/register"} method="post">
           <.button class="bg-green-600 hover:bg-green-700 text-white font-bold">
             <.icon name="hero-check-circle" /> Inscrever-se

@@ -24,4 +24,20 @@
       </.link>
     </div>
   </div>
+  <.link navigate={~p"/events?filter=live"}>
+        <div class="relative group">
+          <%!-- botao pulsante mudar dps  --%>
+          <span class="absolute -top-1 -right-1 flex h-4 w-4">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-4 w-4 bg-red-500"></span>
+          </span>
+          
+          <.button class="mt-4 w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-8 rounded-xl shadow-lg shadow-blue-900/40 transition-all transform hover:scale-105 cursor-pointer flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+              <path d="M4.5 4.5a3 3 0 0 0-3 3v9a3 3 0 0 0 3 3h8.25a3 3 0 0 0 3-3v-9a3 3 0 0 0-3-3H4.5ZM19.94 18.75l-2.69-2.69V7.94l2.69-2.69c.94-.94 2.56-.27 2.56 1.06v11.38c0 1.33-1.62 2-2.56 1.06Z" />
+            </svg>
+            Assitir Agora (Lives)
+          </.button>
+        </div>
+      </.link>
 </div>

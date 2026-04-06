@@ -2,7 +2,7 @@
   <.header>
     Listing Events
     <:actions>
-      <%= if @current_user.role in ["palestrante", "admin"] do %>
+      <%= if @current_user && @current_user.role in ["palestrante", "admin"] do %>
         <.button href={~p"/events/new"}>
           <.icon name="hero-plus" /> New Event
         </.button>
@@ -21,13 +21,13 @@
       <div class="sr-only">
         <.link navigate={~p"/events/#{event}"}>Show</.link>
       </div>
-      <%= if @current_user.id == event.user_id or @current_user.role == "admin" do %>
+      <%= if @current_user && (@current_user.id == event.user_id or @current_user.role == "admin") do %>
         <.link navigate={~p"/events/#{event}/edit"}>Edit</.link>
       <% end %>
     </:action>
 
     <:action :let={event}>
-      <%= if @current_user.id == event.user_id or @current_user.role == "admin" do %>
+      <%= if @current_user && (@current_user.id == event.user_id or @current_user.role == "admin") do %>
         <.link href={~p"/events/#{event}"} method="delete" data-confirm="Tem certeza, mano?">
           Delete
         </.link>
