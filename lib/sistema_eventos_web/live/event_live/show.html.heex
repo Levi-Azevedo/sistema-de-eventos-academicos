@@ -1,7 +1,36 @@
 <div class="max-w-4xl mx-auto p-6 bg-slate-950 rounded-3xl shadow-2xl border border-slate-800">
-  <header class="mb-8">
-    <h1 class="text-3xl font-bold text-white"><%= @event.title %></h1>
-    <p class="text-slate-400 mt-2"><%= @event.description %></p>
+  <header class="mb-8 flex justify-between items-start">
+    <div>
+      <h1 class="text-3xl font-bold text-white"><%= @event.title %></h1>
+      <p class="text-slate-400 mt-2"><%= @event.description %></p>
+    </div>
+
+    <%!-- BOTÃO DO CERTIFICADO: Só aparece se for aluno inscrito --%>
+      <%= if @current_user && @is_registered? && @current_user.id != @event.user_id do %>
+        <.link 
+          href={~p"/events/#{@event.id}/certificado"} 
+          target="_blank"
+          class="inline-flex items-center justify-center rounded-md bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-700 focus:outline-none shrink-0"
+        >
+          <svg class="w-5 h-5 mr-2 -ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+          </svg>
+          Ver Certificado
+        </.link>
+      <% end %>
+
+    <%!-- BOTÃO DE RELATÓRIO: SÓ APARECE SE O USUÁRIO LOGADO FOR O DONO DO EVENTO --%>
+    <%= if @current_user && @current_user.id == @event.user_id do %>
+      <.link 
+        href={~p"/events/#{@event.id}/relatorio"} 
+        class="inline-flex items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shrink-0"
+      >
+        <svg class="w-5 h-5 mr-2 -ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+        </svg>
+        Baixar Relatório (CSV)
+      </.link>
+    <% end %>
   </header>
 
   <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -25,7 +54,7 @@
           <%!-- NOME DO USUÁRIO --%>
           <span class="font-bold text-blue-400"><%= msg.user.nome || msg.user.email %></span>
           
-          <%!-- A TAG MÁGICA DE PALESTRANTE --%>
+          <%!-- TAG DE PALESTRANTE --%>
           <%= if msg.user_id == @event.user_id do %>
             <span class="bg-blue-600 text-white text-[10px] font-extrabold px-1.5 py-0.5 rounded uppercase ml-1 tracking-wider align-middle">
               Palestrante
@@ -35,6 +64,7 @@
           <%!-- CONTEÚDO DA MENSAGEM --%>
           <span class="text-slate-300 ml-1">: <%= msg.content %></span>
         </div>
+        
         
       </div>
 

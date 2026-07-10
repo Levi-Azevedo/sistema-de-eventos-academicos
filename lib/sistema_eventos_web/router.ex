@@ -26,6 +26,9 @@ defmodule SistemaEventosWeb.Router do
     # alteracoes banco de dados (CRUD)
     resources "/events", EventController, except: [:index, :show]
     post "/events/:id/register", EventController, :register
+    
+    get "/events/:id/relatorio", EventController, :export_csv
+    get "/events/:id/certificado", EventController, :show_certificate
 
     live_session :require_authenticated_user,
       on_mount: [{SistemaEventosWeb.UserAuth, :require_authenticated}] do

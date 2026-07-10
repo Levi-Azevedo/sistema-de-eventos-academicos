@@ -3,8 +3,8 @@ defmodule SistemaEventos.Events.Registracion do
   import Ecto.Changeset
 
   schema "registracions" do
-    field :user_id, :id
-    field :event_id, :id
+    belongs_to :user, SistemaEventos.Accounts.User
+    belongs_to :event, SistemaEventos.Events.Event
 
   
     timestamps(type:  :utc_datetime)

@@ -37,7 +37,7 @@ defmodule SistemaEventos.Accounts.User do
       changeset
       |> validate_required([:email])
       |> validate_format(:email, ~r/^[^@,;\s]+@[^@,;\s]+$/,
-        message: "must have the @ sign and no spaces"
+        message: "seu email precisa ter @ roque!"
       )
       |> validate_length(:email, max: 160)
 
@@ -77,7 +77,7 @@ defmodule SistemaEventos.Accounts.User do
   def password_changeset(user, attrs, opts \\ []) do
     user
     |> cast(attrs, [:password])
-    |> validate_confirmation(:password, message: "does not match password")
+    |> validate_confirmation(:password, message: "a senha não bate, mano")
     |> validate_password(opts)
   end
 
@@ -85,10 +85,9 @@ defmodule SistemaEventos.Accounts.User do
     changeset
     |> validate_required([:password])
     |> validate_length(:password, min: 4, max: 72)
-    # Examples of additional password validation:
-    # |> validate_format(:password, ~r/[a-z]/, message: "at least one lower case character")
-    # |> validate_format(:password, ~r/[A-Z]/, message: "at least one upper case character")
-    # |> validate_format(:password, ~r/[!?@#$%^&*_0-9]/, message: "at least one digit or punctuation character")
+    #|> validate_format(:password, ~r/[a-z]/, message: "Pelo menos uma minuscula")
+    #|> validate_format(:password, ~r/[A-Z]/, message: "pelo menos uma maiuscula")
+    |> validate_format(:password, ~r/[!?@#$%^&*_0-9]/, message: "pelo menos um digito ou sinal de pontuacao")
     |> maybe_hash_password(opts)
   end
 
@@ -139,7 +138,11 @@ defmodule SistemaEventos.Accounts.User do
     |> validate_email(otps)
     |> validate_password(otps)
     |> validate_length(:nome, max: 100)
-    |>validate_length(:matricula, max: 9)
+    |> validate_length(:matricula, is: 9, message: "deve ter exatamente 9 digitos")
+    |> validate_format(:matricula, ~r/^\d+$/, message: "deve conter apenas numeros")
+    #|> validate_format(:password, ~r/[a-z]/, message: "Pelo menos uma minuscula")
+    #|> validate_format(:password, ~r/[A-Z]/, message: "pelo menos uma maiuscula")
+    |> validate_format(:password, ~r/[!?@#$%^&*_0-9]/, message: "pelo menos um digito ou sinal de pontuacao")
   end
 
   defp valiadete_role(changeset) do 
@@ -155,6 +158,9 @@ defmodule SistemaEventos.Accounts.User do
     |> validate_required([:nome])
     |> validate_length(:nome, max: 100)
     |> validate_length(:matricula, is: 9, message: "Precisa conter 9 digitos")
-    |> validate_format(:matricula, ~r/^\d+$/, message: "deve conter apenas números")
+    |> validate_format(:matricula, ~r/^\d+$/, message: "deve conter apenas numeros")
+    #|> validate_format(:password, ~r/[a-z]/, message: "Pelo menos uma minuscula")
+    #|> validate_format(:password, ~r/[A-Z]/, message: "pelo menos uma maiuscula")
+    |> validate_format(:password, ~r/[!?@#$%^&*_0-9]/, message: "pelo menos um digito ou sinal de pontuacao")
     end
 end

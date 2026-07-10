@@ -19,7 +19,7 @@ defmodule SistemaEventosWeb.UserLive.Settings do
           </.header>
         </div>
 
-        <%!-- GRID: 1 coluna no celular, 3 colunas no PC --%>
+        
         <div class="mx-auto max-w-7xl grid grid-cols-1 gap-8 lg:grid-cols-3">
 
           <div class="bg-slate-900 border border-slate-800 rounded-3xl p-8 shadow-xl flex flex-col">

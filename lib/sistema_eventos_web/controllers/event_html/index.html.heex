@@ -1,35 +1,35 @@
 <Layouts.app flash={@flash}>
   <.header>
-    Listing Events
+    Eventos ativos:
     <:actions>
       <%= if @current_user && @current_user.role in ["palestrante", "admin"] do %>
         <.button href={~p"/events/new"}>
-          <.icon name="hero-plus" /> New Event
+          <.icon name="hero-plus" /> Novo evento
         </.button>
       <% end %>
     </:actions>
   </.header>
 
   <.table id="events" rows={@events} row_click={&JS.navigate(~p"/events/#{&1}")}>
-    <:col :let={event} label="Title">{event.title}</:col>
-    <:col :let={event} label="Description">{event.description}</:col>
-    <:col :let={event} label="Date">{event.date}</:col>
-    <:col :let={event} label="Location">{event.location}</:col>
-    <:col :let={event} label="Total slots">{event.total_slots}</:col>
+    <:col :let={event} label="Título">{event.title}</:col>
+    <:col :let={event} label="Descrição">{event.description}</:col>
+    <:col :let={event} label="Data">{event.date}</:col>
+    <:col :let={event} label="Localização">{event.location}</:col>
+    <:col :let={event} label="Vagas">{event.total_slots}</:col>
 
     <:action :let={event}>
       <div class="sr-only">
         <.link navigate={~p"/events/#{event}"}>Show</.link>
       </div>
       <%= if @current_user && (@current_user.id == event.user_id or @current_user.role == "admin") do %>
-        <.link navigate={~p"/events/#{event}/edit"}>Edit</.link>
+        <.link navigate={~p"/events/#{event}/edit"}>Editar</.link>
       <% end %>
     </:action>
 
     <:action :let={event}>
       <%= if @current_user && (@current_user.id == event.user_id or @current_user.role == "admin") do %>
         <.link href={~p"/events/#{event}"} method="delete" data-confirm="Tem certeza, mano?">
-          Delete
+          Deletar 
         </.link>
       <% end %>
     </:action>

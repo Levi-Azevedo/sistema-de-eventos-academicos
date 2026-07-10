@@ -15,7 +15,8 @@ defmodule SistemaEventos.Application do
       # Start a worker by calling: SistemaEventos.Worker.start_link(arg)
       # {SistemaEventos.Worker, arg},
       # Start to serve requests, typically the last entry
-      SistemaEventosWeb.Endpoint
+      SistemaEventosWeb.Endpoint,
+      
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

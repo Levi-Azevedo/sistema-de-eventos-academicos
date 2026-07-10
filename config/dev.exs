@@ -3,7 +3,7 @@ import Config
 # Configure your database
 config :sistema_eventos, SistemaEventos.Repo,
   username: "postgres",
-  password: "sua_senha_secreta",
+  password: "sua_senha_secreta_aqui",
   hostname: "localhost",
   database: "sistema_eventos_dev",
   stacktrace: true,
@@ -19,7 +19,7 @@ config :sistema_eventos, SistemaEventos.Repo,
 config :sistema_eventos, SistemaEventosWeb.Endpoint,
   # Binding to loopback ipv4 address prevents access from other machines.
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
-  http: [ip: {127, 0, 0, 1}],
+  http: [ip: {0, 0, 0, 0}],
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
