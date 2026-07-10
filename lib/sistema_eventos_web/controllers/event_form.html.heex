@@ -1,0 +1,20 @@
+<div style="font-family: Arial, sans-serif; text-align: center; padding: 50px; border: 10px solid #2c3e50; margin: 20px;">
+  <h1 style="color: #2c3e50; font-size: 48px;">Certificado de Participação</h1>
+  
+  <p style="font-size: 24px; margin-top: 40px;">
+    Certificamos que <strong><%= @registration.user.nome %></strong>
+  </p>
+  
+  <p style="font-size: 20px;">
+    participou com êxito do evento acadêmico
+  </p>
+  
+  <h2 style="color: #2980b9; font-size: 32px; margin: 20px 0;">
+    <%= @registration.event.title %>
+  </h2>
+  
+  <p style="font-size: 18px; margin-top: 50px;">
+    Universidade Estadual do Sudoeste da Bahia (UESB) <br>
+    Data: <%= Calendar.strftime(DateTime.utc_now(), "%d/%m/%Y") %>
+  </p>
+</div>

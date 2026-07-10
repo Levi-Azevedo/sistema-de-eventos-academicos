@@ -104,6 +104,14 @@ defmodule SistemaEventos.Events do
     Event.changeset(event, attrs)
   end
 
+  def is_user_registered?(event_id, user_id)do
+    query = 
+      from r in Registracion,
+      where: r.event_id == ^event_id and r.user_id == ^user_id
+
+    Repo.exists?(query)
+  end
+
 
   def register_user(event_id,user_id) do #registrador de usuario em um evento, desde q haja vagas
     event = get_event!(event_id)
@@ -121,4 +129,30 @@ defmodule SistemaEventos.Events do
       {:error, :vagas_esgotadas}
     end
   end
+  
+  def get_registration_for_certificate!(id) do
+    Repo.get!(Registracion, id)
+    |> Repo.preload([:user, :event])
+  end
+
+  def list_registrations_for_event_report(event_id) do
+   
+    query = 
+      from r in Registracion,
+      where: r.event_id == ^event_id,
+      join: u in assoc(r, :user),
+      select: %{
+        name: u.nome,
+        email: u.email, 
+        data_inscricao: r.inserted_at
+      }
+
+    Repo.all(query)
+  end
+
+  def get_user_certificate_registration!(event_id, user_id) do
+    Repo.get_by!(Registracion, event_id: event_id, user_id: user_id)
+    |> Repo.preload([:user, :event])
+  end
+
 end

@@ -25,17 +25,32 @@ import {LiveSocket} from "phoenix_live_view"
 import {hooks as colocatedHooks} from "phoenix-colocated/sistema_eventos"
 import topbar from "../vendor/topbar"
 
+//hook pra fazer o chat descer quando manda msg ou quando recebe msg nova
+let Hooks = {}
+Hooks.ChatScroll = {
+  mounted() {
+    this.el.scrollTop = this.el.scrollHeight
+  },
+  updated() {
+    this.el.scrollTo({ top: this.el.scrollHeight, behavior: "smooth" })
+  }
+}
+
 const csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 const liveSocket = new LiveSocket("/live", Socket, {
   longPollFallbackMs: 2500,
   params: {_csrf_token: csrfToken},
-  hooks: {...colocatedHooks},
+  hooks: Hooks
 })
 
 // Show progress bar on live navigation and form submits
 topbar.config({barColors: {0: "#29d"}, shadowColor: "rgba(0, 0, 0, .3)"})
 window.addEventListener("phx:page-loading-start", _info => topbar.show(300))
 window.addEventListener("phx:page-loading-stop", _info => topbar.hide())
+
+
+
+
 
 // connect if there are any LiveViews on the page
 liveSocket.connect()

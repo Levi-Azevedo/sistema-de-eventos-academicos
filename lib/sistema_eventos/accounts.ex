@@ -61,24 +61,19 @@ defmodule SistemaEventos.Accounts do
   def get_user!(id), do: Repo.get!(User, id)
 
   ## User registration
+  def register_user(attrs) do
+    %User{}
+    |> User.registration_changeset(attrs) 
+    |> Repo.insert()
+  end
+
+  def change_user_registration(%User{} = user, attrs \\ %{}) do
+    User.registration_changeset(user, attrs)
+  end
 
   @doc """
   Registers a user.
 
-  ## Examples
-
-      iex> register_user(%{field: value})
-      {:ok, %User{}}
-
-      iex> register_user(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def register_user(attrs) do
-    %User{}
-    |> User.email_changeset(attrs)
-    |> Repo.insert()
-  end
 
   ## Settings
 
@@ -130,6 +125,16 @@ defmodule SistemaEventos.Accounts do
         _ -> {:error, :transaction_aborted}
       end
     end)
+  end
+
+  def change_user_profile(%User{} = user, attrs \\%{})do
+    User.profile_changeset(user, attrs)
+  end
+
+  def update_user_profile(%User{} = user, attrs \\%{})do
+    user 
+    |> User.profile_changeset(attrs)
+    |> Repo.update()
   end
 
   @doc """

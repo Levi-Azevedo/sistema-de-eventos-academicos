@@ -3,11 +3,14 @@ defmodule SistemaEventos.Accounts.User do
   import Ecto.Changeset
 
   schema "users" do
+    field :nome, :string 
+    field :matricula, :string  
     field :email, :string
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :confirmed_at, :utc_datetime
     field :authenticated_at, :utc_datetime, virtual: true
+    field :role, :string, default: "aluno"
 
     timestamps(type: :utc_datetime)
   end
@@ -34,7 +37,7 @@ defmodule SistemaEventos.Accounts.User do
       changeset
       |> validate_required([:email])
       |> validate_format(:email, ~r/^[^@,;\s]+@[^@,;\s]+$/,
-        message: "must have the @ sign and no spaces"
+        message: "seu email precisa ter @ roque!"
       )
       |> validate_length(:email, max: 160)
 
@@ -74,18 +77,17 @@ defmodule SistemaEventos.Accounts.User do
   def password_changeset(user, attrs, opts \\ []) do
     user
     |> cast(attrs, [:password])
-    |> validate_confirmation(:password, message: "does not match password")
+    |> validate_confirmation(:password, message: "a senha não bate, mano")
     |> validate_password(opts)
   end
 
   defp validate_password(changeset, opts) do
     changeset
     |> validate_required([:password])
-    |> validate_length(:password, min: 12, max: 72)
-    # Examples of additional password validation:
-    # |> validate_format(:password, ~r/[a-z]/, message: "at least one lower case character")
-    # |> validate_format(:password, ~r/[A-Z]/, message: "at least one upper case character")
-    # |> validate_format(:password, ~r/[!?@#$%^&*_0-9]/, message: "at least one digit or punctuation character")
+    |> validate_length(:password, min: 4, max: 72)
+    #|> validate_format(:password, ~r/[a-z]/, message: "Pelo menos uma minuscula")
+    #|> validate_format(:password, ~r/[A-Z]/, message: "pelo menos uma maiuscula")
+    |> validate_format(:password, ~r/[!?@#$%^&*_0-9]/, message: "pelo menos um digito ou sinal de pontuacao")
     |> maybe_hash_password(opts)
   end
 
@@ -127,4 +129,38 @@ defmodule SistemaEventos.Accounts.User do
     Pbkdf2.no_user_verify()
     false
   end
+
+  def registration_changeset(user, attrs, otps \\ []) do
+    user 
+    |> cast(attrs, [:email,:nome, :matricula, :password, :role])
+    |> validate_required([:nome, :matricula])
+    |> valiadete_role()
+    |> validate_email(otps)
+    |> validate_password(otps)
+    |> validate_length(:nome, max: 100)
+    |> validate_length(:matricula, is: 9, message: "deve ter exatamente 9 digitos")
+    |> validate_format(:matricula, ~r/^\d+$/, message: "deve conter apenas numeros")
+    #|> validate_format(:password, ~r/[a-z]/, message: "Pelo menos uma minuscula")
+    #|> validate_format(:password, ~r/[A-Z]/, message: "pelo menos uma maiuscula")
+    |> validate_format(:password, ~r/[!?@#$%^&*_0-9]/, message: "pelo menos um digito ou sinal de pontuacao")
+  end
+
+  defp valiadete_role(changeset) do 
+    validate_inclusion(changeset, :role, ["aluno", "palestrante", "admin"])
+  end
+
+  @doc """
+  alterar o nome e matriclua do usuario 
+  """
+  def profile_changeset(user, attrs) do
+    user 
+    |> cast(attrs, [:nome, :matricula])
+    |> validate_required([:nome])
+    |> validate_length(:nome, max: 100)
+    |> validate_length(:matricula, is: 9, message: "Precisa conter 9 digitos")
+    |> validate_format(:matricula, ~r/^\d+$/, message: "deve conter apenas numeros")
+    #|> validate_format(:password, ~r/[a-z]/, message: "Pelo menos uma minuscula")
+    #|> validate_format(:password, ~r/[A-Z]/, message: "pelo menos uma maiuscula")
+    |> validate_format(:password, ~r/[!?@#$%^&*_0-9]/, message: "pelo menos um digito ou sinal de pontuacao")
+    end
 end
